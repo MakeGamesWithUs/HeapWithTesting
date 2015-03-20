@@ -10,6 +10,9 @@
 #import <XCTest/XCTest.h>
 #import "NSMutableArray+HeapSort.h"
 
+// comment out this line to receive efficient and unhumorous failure messages.
+#define DANIEL = 1
+
 static const NSUInteger kArrayLength = 100000;
 
 @interface HeapWithTestingTests : XCTestCase
@@ -30,7 +33,7 @@ static const NSUInteger kArrayLength = 100000;
 }
 
 - (void)testHeapifyDidSucceed {
-    NSLog(@"testHeapifyDidSucceed assumes a max heap. If you use a min heap, you must rewrite this test.");
+#warning testHeapifyDidSucceed assumes a max heap. If you use a min heap, you must modify this test.
     
     // heapify
     [self.array heapify];
@@ -54,9 +57,21 @@ static const NSUInteger kArrayLength = 100000;
             heapIsValid = NO;
             break;
         }
+        if (rightChild && [rightChild compare:node] == NSOrderedAscending) {
+            heapIsValid = NO;
+            break;
+        }
     }
     
+#ifdef DANIEL
+    
     XCTAssert(heapIsValid, @"Heapify does not work. Send help");
+    
+#else
+    
+    XCTAssert(heapIsValid, @"Failed to properly heapify.");
+    
+#endif
 }
 
 - (void)testSortDidSucceed {
@@ -71,7 +86,15 @@ static const NSUInteger kArrayLength = 100000;
     
     BOOL result = [self.array isEqualToArray:referenceArray];
 
+#ifdef DANIEL
+    
     XCTAssert(result, @"HEAPSORT is ALL WRONG!!! OH NO...!!!!!");
+    
+#else
+    
+    XCTAssert(result, @"Failed to properly heapsort.");
+    
+#endif
 }
 
 @end
